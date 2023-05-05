@@ -3,7 +3,9 @@ h1 {
 }
 
 #reader {
-  width: 500px;
+  min-width: 80vw;
+  max-width: 500px;
+  width: 100%;
 }
 
 .result {
