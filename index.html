@@ -41,10 +41,8 @@
     <script>
       // When scan is successful fucntion will produce data
       function onScanSuccess(qrCodeMessage) {
-        // document.getElementById("result").innerHTML =
-        //   '<span class="result">' + qrCodeMessage + "</span>";
-
-        window.location.href = qrCodeMessage;
+        document.getElementById("result").innerHTML =
+          '<span class="result">' + qrCodeMessage + "</span>";
       }
 
       // When scan is unsuccessful fucntion will produce error message
