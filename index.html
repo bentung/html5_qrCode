@@ -58,6 +58,13 @@
 
       // in
       html5QrCodeScanner.render(onScanSuccess, onScanError);
+
+      /** load scanner using back camera **/
+      html5QrCode.start(
+        { facingMode: { exact: "environment" } },
+        config,
+        qrCodeSuccessCallback
+      );
     </script>
 
     <!-- <script src="./js/html5-qrcode.min.js"></script> -->
