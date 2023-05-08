@@ -39,6 +39,37 @@
     </div>
 
     <script>
+      // This method will trigger user permissions
+      Html5Qrcode.getCameras()
+        .then((devices) => {
+          if (devices && devices.length) {
+            var cameraId = devices[0].id;
+            const html5QrCode = new Html5Qrcode("reader");
+            const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+              confirm(decodedText); // 這裡已經可以正確彈出掃描結果，但點按無法跳轉
+            };
+            const config = {
+              fps: 25,
+              qrbox: {
+                width: 350,
+                height: 350,
+              },
+            };
+            html5QrCode.start(
+              {
+                facingMode: "environment",
+              },
+              config,
+              qrCodeSuccessCallback
+            );
+          }
+        })
+        .catch((err) => {
+          // handle err
+        });
+    </script>
+
+    <!-- <script>
       // When scan is successful fucntion will produce data
       function onScanSuccess(qrCodeMessage) {
         document.getElementById("result").innerHTML =
@@ -60,12 +91,12 @@
       html5QrCodeScanner.render(onScanSuccess, onScanError);
 
       /** load scanner using back camera **/
-      html5QrCode.start(
+      html5QrCodeScanner.start(
         { facingMode: { exact: "environment" } },
         config,
         qrCodeSuccessCallback
       );
-    </script>
+    </script> -->
 
     <!-- <script src="./js/html5-qrcode.min.js"></script> -->
   </body>
