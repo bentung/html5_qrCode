@@ -43,7 +43,7 @@
     <script>
       $(document).ready(function () {
         // Step 1: QR Code Scanner
-        var scanner = new Html5Qrcode("reader");
+        let scanner = new Html5Qrcode("reader");
         function onScanSuccess(qrCodeMessage) {
           // Step 2: Display Scan Result
           $("#scan-result").text(qrCodeMessage);
@@ -51,37 +51,53 @@
           $("#step2").show();
         }
         function onScanError(errorMessage) {
-          alert(errorMessage);
+          console.log(errorMessage);
         }
-
-        function initScanner() {
+        function startScanner() {
           Html5Qrcode.getCameras()
             .then(function (cameras) {
               if (cameras && cameras.length) {
-                scanner.start(
-                  { facingMode: "environment" },
-                  { fps: 10, qrbox: 250 },
-                  onScanSuccess,
-                  onScanError
-                );
+                // Find the ID of the back camera, if available
+                let backCameraId = null;
+                for (let camera of cameras) {
+                  if (camera.facingMode.toLowerCase() === "environment") {
+                    backCameraId = camera.id;
+                    break;
+                  }
+                }
+                // Start the scanner with the back camera, if available
+                if (backCameraId) {
+                  scanner.start(
+                    backCameraId,
+                    { fps: 10, qrbox: 250 },
+                    onScanSuccess,
+                    onScanError
+                  );
+                } else {
+                  // If no back camera is available, use the first camera in the list
+                  scanner.start(
+                    cameras[0].id,
+                    { fps: 10, qrbox: 250 },
+                    onScanSuccess,
+                    onScanError
+                  );
+                }
               } else {
-                alert("No cameras found.");
+                console.log("No cameras found.");
               }
             })
             .catch(function (error) {
-              alert(error);
+              console.log(error);
             });
         }
-
-        initScanner();
+        startScanner();
 
         // Step 2: Scan Again button
         $("#scan-again").click(function () {
           scanner.stop();
           $("#step1").show();
           $("#step2").hide();
-
-          initScanner();
+          startScanner();
         });
       });
     </script>
