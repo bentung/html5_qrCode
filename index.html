@@ -21,14 +21,62 @@
       crossorigin="anonymous"
     ></script> -->
     <link rel="stylesheet" href="./css/style.css" />
-
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.2.0/html5-qrcode.min.js"></script>
   </head>
   <body>
     <h1>QR Code Reader using Javascript</h1>
 
+    <!-- Step 1: QR Code Scanner -->
+    <div id="step1">
+      <h2>Step 1: Scan QR Code</h2>
+      <div id="reader"></div>
+    </div>
+
+    <!-- Step 2: Display Scan Result -->
+    <div id="step2" style="display: none">
+      <h2>Step 2: Scan Result</h2>
+      <p id="scan-result"></p>
+      <button id="scan-again">Scan Again</button>
+    </div>
+
+    <script>
+      // Step 1: QR Code Scanner
+      $(function () {
+        let scanner = new Html5Qrcode("reader");
+        scanner.start(
+          { facingMode: "environment" },
+          {
+            qrbox: 250,
+          },
+          qrCodeSuccessCallback
+        );
+
+        function qrCodeSuccessCallback(qrCodeMessage) {
+          // Step 2: Display Scan Result
+          $("#scan-result").text(qrCodeMessage);
+          $("#step1").hide();
+          $("#step2").show();
+        }
+
+        // Step 2: Scan Again button
+        $("#scan-again").click(function () {
+          scanner.clear();
+          scanner.start(
+            { facingMode: "environment" },
+            {
+              qrbox: 250,
+            },
+            qrCodeSuccessCallback
+          );
+          $("#step1").show();
+          $("#step2").hide();
+        });
+      });
+    </script>
+
     <!-- QR SCANNER CODE BELOW  -->
-    <div class="d-flex flex-column align-items-center">
+    <!-- <div class="d-flex flex-column align-items-center">
       <div class="">
         <div id="reader"></div>
       </div>
@@ -68,7 +116,7 @@
         .catch((err) => {
           // handle err
         });
-    </script>
+    </script> -->
 
     <!-- <script>
       // When scan is successful fucntion will produce data
