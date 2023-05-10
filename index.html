@@ -43,7 +43,7 @@
     <script>
       $(document).ready(function () {
         // Step 1: QR Code Scanner
-        let scanner = new Html5Qrcode("reader");
+        var scanner = new Html5Qrcode("reader");
         function onScanSuccess(qrCodeMessage) {
           // Step 2: Display Scan Result
           $("#scan-result").text(qrCodeMessage);
@@ -51,30 +51,37 @@
           $("#step2").show();
         }
         function onScanError(errorMessage) {
-          console.log(errorMessage);
+          alert(errorMessage);
         }
-        Html5Qrcode.getCameras()
-          .then(function (cameras) {
-            if (cameras && cameras.length) {
-              scanner.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: 250 },
-                onScanSuccess,
-                onScanError
-              );
-            } else {
-              console.log("No cameras found.");
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+
+        function initScanner() {
+          Html5Qrcode.getCameras()
+            .then(function (cameras) {
+              if (cameras && cameras.length) {
+                scanner.start(
+                  { facingMode: "environment" },
+                  { fps: 10, qrbox: 250 },
+                  onScanSuccess,
+                  onScanError
+                );
+              } else {
+                alert("No cameras found.");
+              }
+            })
+            .catch(function (error) {
+              alert(error);
+            });
+        }
+
+        initScanner();
 
         // Step 2: Scan Again button
         $("#scan-again").click(function () {
           scanner.stop();
           $("#step1").show();
           $("#step2").hide();
+
+          initScanner();
         });
       });
     </script>
