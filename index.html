@@ -43,7 +43,7 @@
     <script>
       $(document).ready(function () {
         // Step 1: QR Code Scanner
-        let scanner = new Html5Qrcode("reader");
+        var scanner = new Html5Qrcode("reader");
         function onScanSuccess(qrCodeMessage) {
           // Step 2: Display Scan Result
           $("#scan-result").text(qrCodeMessage);
@@ -54,8 +54,10 @@
           console.log(errorMessage);
         }
         function startScanner() {
+          console.log("start scanner");
           Html5Qrcode.getCameras()
             .then(function (cameras) {
+              console.log(cameras);
               if (cameras && cameras.length) {
                 // Find the ID of the back camera, if available
                 let backCameraId = null;
@@ -66,22 +68,37 @@
                   }
                 }
                 // Start the scanner with the back camera, if available
-                if (backCameraId) {
-                  scanner.start(
-                    backCameraId,
-                    { fps: 10, qrbox: 250 },
-                    onScanSuccess,
-                    onScanError
-                  );
-                } else {
-                  // If no back camera is available, use the first camera in the list
-                  scanner.start(
-                    cameras[0].id,
-                    { fps: 10, qrbox: 250 },
-                    onScanSuccess,
-                    onScanError
-                  );
-                }
+                // if (backCameraId) {
+                //   scanner.start(
+                //     backCameraId,
+                //     { fps: 10, qrbox: 250 },
+                //     onScanSuccess,
+                //     onScanError
+                //   );
+                // } else {
+                //   // If no back camera is available, use the first camera in the list
+                //   scanner.start(
+                //     cameras[0].id,
+                //     { fps: 10, qrbox: 250 },
+                //     onScanSuccess,
+                //     onScanError
+                //   );
+                // }
+                const config = {
+                  fps: 10,
+                  qrbox: 250,
+                  // qrbox: {
+                  //   width: 350,
+                  //   height: 350,
+                  // },
+                };
+                html5QrCode.start(
+                  {
+                    facingMode: "environment",
+                  },
+                  config,
+                  onScanSuccess
+                );
               } else {
                 console.log("No cameras found.");
               }
